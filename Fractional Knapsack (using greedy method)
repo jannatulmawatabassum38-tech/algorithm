@@ -1,0 +1,35 @@
+#include <stdio.h>
+void sortByRatio(int w[], int v[], float r[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (r[j] < r[j + 1]) {
+                float tempR = r[j];
+                r[j] = r[j + 1];
+                r[j + 1] = tempR;
+                int tempW = w[j];
+                w[j] = w[j + 1];
+                w[j + 1] = tempW;
+                int tempV = v[j];
+                v[j] = v[j + 1];
+                v[j + 1] = tempV; }}}}
+int main() {
+    int n, capacity;
+    scanf("%d", &n);
+    int weight[n], value[n];
+    float ratio[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%d %d", &weight[i], &value[i]);
+        ratio[i] = (float)value[i] / weight[i];  }
+    scanf("%d", &capacity);
+    sortByRatio(weight, value, ratio, n);
+    float totalValue = 0.0;
+    for (int i = 0; i < n; i++) {
+        if (weight[i] <= capacity) {
+            capacity -= weight[i];
+            totalValue += value[i];
+        } else {
+            totalValue += ratio[i] * capacity;
+           break;  } }
+    printf("Maximum value = %.2f\n", totalValue);
+    return 0;
+}

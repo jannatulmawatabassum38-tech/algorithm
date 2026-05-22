@@ -1,0 +1,26 @@
+#include <stdio.h>
+int main() {
+    int n;
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+    int arr[n], lis[n];
+    printf("Enter array elements:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+        lis[i] = 1;
+    }
+    for (int i = 1; i < n; i++) {
+        for (int j = 0; j < i; j++) {
+            if (arr[i] > arr[j] && lis[i] < lis[j] + 1) {
+                lis[i] = lis[j] + 1;
+            }
+        }
+    }
+    int max = lis[0];
+    for (int i = 1; i < n; i++) {
+        if (lis[i] > max)
+            max = lis[i];
+    }
+    printf("Length of LIS = %d\n", max);
+    return 0;
+}

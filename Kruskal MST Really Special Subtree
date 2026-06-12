@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+using namespace std;
+string ltrim(const string &);
+string rtrim(const string &);
+vector<string> split(const string &);
+int findParent(int node, vector<int>& parent) {
+    if (parent[node] == node)
+        return node;
+    return parent[node] = findParent(parent[node], parent);}
+int kruskals(int g_nodes, vector<int> g_from, vector<int> g_to, vector<int> g_weight) {
+    vector<pair<pair<int, int>, pair<int, int>>> edges;
+    for (int i = 0; i < g_from.size(); i++) {
+        edges.push_back({
+            {g_weight[i], g_from[i] + g_to[i] + g_weight[i]},
+            {g_from[i], g_to[i]}
+        });}
+    sort(edges.begin(), edges.end());
+    vector<int> parent(g_nodes + 1);
+    for (int i = 1; i <= g_nodes; i++) {
+        parent[i] = i; }
+    int totalWeight = 0;
+    for (auto edge : edges) {
+        int w = edge.first.first;
+        int u = edge.second.first;
+        int v = edge.second.second;
+        int pu = findParent(u, parent);
+        int pv = findParent(v, parent);
+        if (pu != pv) {
+            parent[pu] = pv;
+            totalWeight += w; } }
+    return totalWeight;}
+int main() {
+    ofstream fout(getenv("OUTPUT_PATH"));
+    string g_nodes_edges_temp;
+    getline(cin, g_nodes_edges_temp);
+    vector<string> g_nodes_edges = split(rtrim(g_nodes_edges_temp));
+    int g_nodes = stoi(g_nodes_edges[0]);
+    int g_edges = stoi(g_nodes_edges[1]);
+    vector<int> g_from(g_edges);
+    vector<int> g_to(g_edges);
+    vector<int> g_weight(g_edges);
+    for (int i = 0; i < g_edges; i++) {
+        string g_from_to_weight_temp;
+        getline(cin, g_from_to_weight_temp);
+        vector<string> g_from_to_weight = split(rtrim(g_from_to_weight_temp));
+        g_from[i] = stoi(g_from_to_weight[0]);
+        g_to[i] = stoi(g_from_to_weight[1]);
+        g_weight[i] = stoi(g_from_to_weight[2]); }
+    int res = kruskals(g_nodes, g_from, g_to, g_weight);
+    fout << res << "\n";
+    fout.close();
+    return 0;}
+string ltrim(const string &str) {
+    string s(str);
+    s.erase(
+        s.begin(),
+        find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace))));
+    return s;}
+string rtrim(const string &str) {
+    string s(str);
+    s.erase(
+        find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(),
+        s.end());
+    return s;}
+vector<string> split(const string &str) {
+    vector<string> tokens;
+    string::size_type start = 0;
+    string::size_type end = 0;
+    while ((end = str.find(" ", start)) != string::npos) {
+        tokens.push_back(str.substr(start, end - start));
+        start = end + 1;}
+    tokens.push_back(str.substr(start));
+return tokens;}

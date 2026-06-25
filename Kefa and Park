@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+vector<int> cat;
+vector<vector<int>> graph;
+int n, m;
+int ans = 0;
+void dfs(int node, int parent, int consecutive) {
+    if (cat[node])
+        consecutive++;
+    else
+        consecutive = 0;
+    if (consecutive > m)
+        return;
+    bool isLeaf = true;
+    for (int child : graph[node]) {
+        if (child == parent)
+            continue;
+        isLeaf = false;
+        dfs(child, node, consecutive);}
+    if (isLeaf)
+        ans++;}
+int main() {
+    cin >> n >> m;
+    cat.resize(n + 1);
+    graph.resize(n + 1);
+    for (int i = 1; i <= n; i++) {
+        cin >> cat[i];}
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        graph[u].push_back(v);
+        graph[v].push_back(u);}
+    dfs(1, -1, 0);
+    cout << ans << endl;
+return 0;}

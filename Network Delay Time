@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        vector<vector<int>> dist(n + 1, vector<int>(n + 1, INT_MAX));
+        for (auto &e : times) {
+            dist[e[0]][e[1]] = e[2];}
+        vector<int> d(n + 1, INT_MAX);
+        vector<bool> visited(n + 1, false);
+        d[k] = 0;
+        for (int i = 1; i <= n; i++) {
+            int u = -1;
+            for (int j = 1; j <= n; j++) {
+                if (!visited[j] && (u == -1 || d[j] < d[u])) {
+                    u = j;}}
+            if (u == -1 || d[u] == INT_MAX) break;
+            visited[u] = true;
+            for (int v = 1; v <= n; v++) {
+                if (dist[u][v] != INT_MAX) {
+                    d[v] = min(d[v], d[u] + dist[u][v]);}}}
+        int ans = 0;
+        for (int i = 1; i <= n; i++) {
+            if (d[i] == INT_MAX) return -1;
+            ans = max(ans, d[i]);}
+        return ans;}};

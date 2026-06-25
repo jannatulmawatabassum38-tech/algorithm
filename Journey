@@ -1,0 +1,27 @@
+#include <bits/stdc++.h>
+using namespace std;
+vector<vector<int>> graph;
+double ans = 0.0;
+void dfs(int node, int parent, double prob, int depth) {
+    int children = 0;
+    for (int next : graph[node]) {
+        if (next != parent)
+            children++;}
+    if (children == 0) {
+        ans += prob * depth;
+        return;}
+    for (int next : graph[node]) {
+        if (next == parent) continue;
+        dfs(next, node, prob / children, depth + 1);}}
+int main() {
+    int n;
+    cin >> n;
+    graph.resize(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        graph[u].push_back(v);
+        graph[v].push_back(u);}
+    dfs(1, -1, 1.0, 0);
+    cout << fixed << setprecision(15) << ans << endl;
+    return 0;}

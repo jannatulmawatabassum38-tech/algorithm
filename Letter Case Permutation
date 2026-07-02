@@ -1,0 +1,17 @@
+class Solution {
+public:
+    vector<string> letterCasePermutation(string s) {
+        vector<string> ans;
+        ans.push_back("");
+        for (char c : s) {
+            int n = ans.size();
+            if (isalpha(c)) {
+                for (int i = 0; i < n; i++) {
+                    string temp = ans[i];
+                    ans[i] += tolower(c);
+                    temp += toupper(c);
+                    ans.push_back(temp);}
+            } else {
+                for (int i = 0; i < n; i++) {
+                    ans[i] += c;}}}
+        return ans;}};
